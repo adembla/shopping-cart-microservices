@@ -1,0 +1,73 @@
+#notice the use of profiles one for localhost, one for docker
+spring:
+  profiles:
+    active: "dev"
+  main:
+    banner-mode: "off"  
+  freemarker:
+    enabled: false           # Ignore Eureka dashboard FreeMarker templates
+  zipkin:
+    base-url: http://localhost:9411/  
+server:
+  port: ${customer.port:8100} 
+  
+---
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:${discovery.port:1111}/eureka/ # using eureka instead of localhost
+  instance:
+    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
+    preferIpAddress: true
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:h2:mem:cust_ms
+    username: sa
+    password: 
+    data: classpath:/sql/data.sql
+    platform: org.hibernate.dialect.H2Dialect
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      feignName:
+        connectTimeout: ${productms.feign.hystrix.connectTimeout:5000}
+        readTimeout: ${productms.feign.hystrix.readTimeout:5000}
+
+
+security:
+  oauth2:
+    client:
+      client-id: appclient
+      client-secret: appclient@123
+    resource:
+      id: carInventory
+      jwt:
+        key-value: JWTKey@123
+---
+
+spring:
+  profiles: docker
+  jpa:
+    hibernate:
+      ddl-auto: none  
+  datasource:
+    url: jdbc:mysql://localhost:3306/cust_ms
+    username: root
+    password: password    
+  
+    
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:${customer.discovery.port}/eureka/ # using eureka instead of localhost
+  instance:
+    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
+    preferIpAddress: true

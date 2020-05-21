@@ -1,0 +1,63 @@
+#notice the use of profiles one for localhost, one for docker
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:${discovery.port:1111}/eureka/ # using eureka instead of localhost
+  instance:
+    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
+    preferIpAddress: true
+
+spring:
+  profiles:
+    active: "dev"
+  datasource:
+    url: jdbc:h2:mem:orders_ms
+    username: sa
+    password: 
+    data: classpath:/sql/data.sql
+    platform: org.hibernate.dialect.H2Dialect
+  main:
+    banner-mode: "off"  
+  freemarker:
+    enabled: false           # Ignore Eureka dashboard FreeMarker templates
+  zipkin:
+    base-url: http://localhost:9411/ 
+  sleuth:
+    sampler:
+      percentage: 0.4
+    #zuul:
+      #enabled: true  
+      
+server:
+  port: ${order.port:8300}  
+
+
+security:
+  oauth2:
+    client:
+      client-id: appclient
+      client-secret: appclient@123
+    resource:
+      id: carInventory
+      jwt:
+        key-value: JWTKey@123
+    
+---
+
+spring:
+  profiles: docker
+  datasource:   #docker instance of mysql
+    url: jdbc:mysql://localhost:32768/invoice_ms
+    username: root
+    password: password 
+  jpa:
+    hibernate:
+      ddl-auto: none        
+    
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:${discovery.port:1111}/eureka/ # using eureka instead of localhost
+
+    

@@ -1,0 +1,23 @@
+INSERT INTO customer(CUST_NAME, CUST_GENDER, CUST_PHONE_NUM) VALUES('Anand Dembla','MALE',90876543); 
+
+INSERT INTO customer(CUST_NAME, CUST_GENDER, CUST_PHONE_NUM) VALUES('John Cena','MALE',12345678); 
+
+INSERT INTO customer(CUST_NAME, CUST_GENDER, CUST_PHONE_NUM) VALUES('Priyanka Dion','FEMALE',876541213); 
+
+INSERT INTO customer(CUST_NAME, CUST_GENDER, CUST_PHONE_NUM) VALUES('Miley Cyrus','FEMALE',908734512); 
+
+commit;
+
+INSERT INTO address(CUST_ID,APARTMENT_NAME,STREET_NAME,CITY,STATE,PIN)
+ VALUES (1,'Eklavya Residency','Gandhi Baug','Bangalore','Karanataka',560037);
+ 
+ INSERT INTO address(CUST_ID,APARTMENT_NAME,STREET_NAME,CITY,STATE,PIN)
+ VALUES (2,'Aeropolis Residency','Karve Nagar','Pune','Maharashtra',412308);
+ 
+ INSERT INTO address(CUST_ID,APARTMENT_NAME,STREET_NAME,CITY,STATE,PIN)
+ VALUES (3,'Salunke Vihar','Kharadi','Pune','Maharashtra',411014);
+ 
+ INSERT INTO address(CUST_ID,APARTMENT_NAME,STREET_NAME,CITY,STATE,PIN)
+ VALUES (4,'Lodha Prime','Bombay Kurla Complex','Mumbai','Maharashtra',411213); 
+ 
+commit;

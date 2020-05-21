@@ -1,0 +1,75 @@
+#notice the use of profiles one for localhost, one for docker
+spring:
+  profiles:
+    active: "dev"
+  main:
+    banner-mode: "off"  
+  freemarker:
+    enabled: false           # Ignore Eureka dashboard FreeMarker templates
+#  zipkin:
+#     locator:
+#      discovery:
+#        enabled: true
+#     service:
+#         name: inventory  
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:${discovery.port:1111}/eureka/ # using eureka instead of localhost
+  instance:
+    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
+    preferIpAddress: true
+     
+    
+server:
+  port: ${inventory.port:8500}      
+  
+  
+security:
+  oauth2:
+    client:
+      client-id: appclient
+      client-secret: appclient@123
+    resource:
+      id: carInventory
+      jwt:
+        key-value: JWTKey@123
+---
+
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:h2:mem:prod_ms
+    username: sa
+    password: 
+    data: classpath:/sql/data.sql
+    platform: org.hibernate.dialect.H2Dialect
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      
+#spring:
+  #profiles: dev
+  #datasource:
+    #url: jdbc:mysql://127.0.0.1:3306/prod_ms
+    #username: root
+    #password: password
+    #data: classpath:/sql/data.sql
+  #jpa:
+    #hibernate:
+      #ddl-auto: create-drop    
+  
+---
+
+spring:
+  profiles: docker
+  datasource:   #docker instance of mysql
+    url: jdbc:mysql://localhost:32768/prod_ms  
+    username: root
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: none 
+      naming:
+       strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    database-platform: org.hibernate.dialect.MySQL5Dialect
